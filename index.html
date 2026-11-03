@@ -7,700 +7,404 @@
 
 <style>
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Tahoma;
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Tahoma, Geneva, Verdana, sans-serif;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+#messages, input, textarea {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
 }
 
 html, body{
-height:100%;
-overflow:hidden;
+  height:100%;
+  width:100%;
+  overflow:hidden;
+  background:#0f172a;
 }
 
 body{
-background:#0f172a;
-display:flex;
-justify-content:center;
-align-items:center;
-padding:10px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:10px;
 }
 
+/* الحاوية الرئيسية بحدود وثبات كامل للشاشة */
 .container{
-width:100%;
-max-width:900px;
-height:100vh;
-max-height:800px;
-background:#fff;
-border-radius:15px;
-box-shadow:0 0 20px rgba(0,0,0,.3);
-overflow:hidden;
-display:flex;
-flex-direction:column;
-position:relative;
+  width:100%;
+  max-width:900px;
+  height:100%;
+  max-height:850px;
+  background:#fff;
+  border-radius:15px;
+  box-shadow:0 10px 25px rgba(0,0,0,.3);
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  position:relative;
 }
 
 .header{
-background:#1e3a8a;
-color:white;
-padding:12px 15px;
-text-align:center;
-font-size:22px;
-font-weight:bold;
-flex-shrink:0;
-display:flex;
-justify-content:space-between;
-align-items:center;
-z-index:10;
+  background:#1e3a8a;
+  color:white;
+  padding:12px 15px;
+  text-align:center;
+  font-size:22px;
+  font-weight:bold;
+  flex-shrink:0;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  z-index:10;
 }
 
 .header-title{
-flex:1;
-text-align:center;
+  flex:1;
+  text-align:center;
 }
 
 .online{
-background:#e0f2fe;
-padding:8px 10px;
-text-align:center;
-font-size:14px;
-flex-shrink:0;
-z-index:10;
-max-height:200px;
-overflow-y:auto;
+  background:#e0f2fe;
+  padding:8px 10px;
+  text-align:center;
+  font-size:14px;
+  flex-shrink:0;
+  z-index:10;
+  max-height:120px;
+  overflow-y:auto;
+  border-bottom: 1px solid #cbd5e1;
 }
 
 .online-users{
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
-gap:5px 15px;
-margin-top:5px;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:5px 15px;
+  margin-top:5px;
 }
 
 .online-user{
-display:inline-flex;
-align-items:center;
-gap:5px;
-font-size:13px;
-padding:2px 10px;
-background:white;
-border-radius:12px;
-box-shadow:0 1px 3px rgba(0,0,0,0.1);
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  font-size:13px;
+  padding:2px 10px;
+  background:white;
+  border-radius:12px;
+  box-shadow:0 1px 3px rgba(0,0,0,0.1);
 }
 
 .online-user .status-dot{
-display:inline-block;
-width:10px;
-height:10px;
-border-radius:50%;
-flex-shrink:0;
-background:#22c55e;
-box-shadow:0 0 6px #22c55e;
-animation: pulse-green 1.5s infinite;
+  display:inline-block;
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  flex-shrink:0;
+  background:#22c55e;
+  box-shadow:0 0 6px #22c55e;
 }
 
-@keyframes pulse-green{
-0%, 100%{
-box-shadow:0 0 6px #22c55e;
-}
-50%{
-box-shadow:0 0 14px #22c55e;
-}
-}
+.online-user .user-name{ font-weight:500; }
+.online-user .user-status-text{ font-size:11px; color:#22c55e; }
 
-.online-user .user-name{
-font-weight:500;
-}
-
-.online-user .user-status-text{
-font-size:11px;
-color:#22c55e;
-}
-
+/* منطقة عرض الرسائل مع تمرير مستقل وصارم */
 #messages-wrapper{
-flex:1;
-overflow:hidden;
-position:relative;
-min-height:0;
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+  background: #f8fafc;
 }
 
 #messages{
-height:100%;
-overflow-y:auto;
-padding:12px 12px 80px 12px;
-background:#f8fafc;
--webkit-overflow-scrolling:touch;
-display:flex;
-flex-direction:column;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow-y: auto;
+  padding: 12px;
+  -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-direction: column;
 }
 
 .msg{
-padding:10px 12px;
-margin-bottom:10px;
-border-radius:10px;
-font-size:17px;
-line-height:1.5;
-word-wrap:break-word;
-overflow-wrap:break-word;
-flex-shrink:0;
-animation: fadeIn 0.3s ease-in;
-max-width:100%;
-}
-
-@keyframes fadeIn{
-from{
-opacity:0;
-transform:translateY(-10px);
-}
-to{
-opacity:1;
-transform:translateY(0);
-}
+  padding:10px 12px;
+  margin-bottom:10px;
+  border-radius:10px;
+  font-size:16px;
+  line-height:1.5;
+  word-wrap:break-word;
+  overflow-wrap:break-word;
+  flex-shrink:0;
+  max-width:100%;
 }
 
 .name{
-font-weight:bold;
-font-size:18px;
-display:block;
-margin-bottom:3px;
+  font-weight:bold;
+  font-size:16px;
+  display:block;
+  margin-bottom:3px;
 }
 
 .time{
-font-size:12px;
-color:#666;
-margin-top:4px;
-display:block;
+  font-size:11px;
+  color:#666;
+  margin-top:4px;
+  display:block;
 }
 
 .msg-image{
-max-width:100%;
-max-height:300px;
-border-radius:8px;
-margin:5px 0;
-cursor:pointer;
-border:1px solid #e5e7eb;
-}
-
-.msg-image:hover{
-opacity:0.9;
+  max-width:100%;
+  max-height:300px;
+  border-radius:8px;
+  margin:5px 0;
+  cursor:pointer;
+  border:1px solid #e5e7eb;
 }
 
 .msg-audio{
-width:100%;
-max-width:300px;
-margin:5px 0;
+  width:100%;
+  max-width:300px;
+  margin:5px 0;
 }
 
 .msg-file{
-display:inline-block;
-background:#e0e7ff;
-padding:8px 15px;
-border-radius:8px;
-color:#1e3a8a;
-text-decoration:none;
-margin:5px 0;
-}
-
-.msg-file:hover{
-background:#c7d2fe;
+  display:inline-block;
+  background:#e0e7ff;
+  padding:8px 15px;
+  border-radius:8px;
+  color:#1e3a8a;
+  text-decoration:none;
+  margin:5px 0;
 }
 
 .uploading-msg{
-opacity:0.7;
-background:#f3f4f6 !important;
+  opacity:0.7;
+  background:#f3f4f6 !important;
 }
 
 .uploading-msg .upload-spinner{
-display:inline-block;
-width:16px;
-height:16px;
-border:3px solid #e5e7eb;
-border-top:3px solid #2563eb;
-border-radius:50%;
-animation: spin 0.8s linear infinite;
-margin-left:8px;
-vertical-align:middle;
+  display:inline-block;
+  width:16px;
+  height:16px;
+  border:3px solid #e5e7eb;
+  border-top:3px solid #2563eb;
+  border-radius:50%;
+  animation: spin 0.8s linear infinite;
+  margin-left:8px;
+  vertical-align:middle;
 }
 
 @keyframes spin{
-0%{transform:rotate(0deg);}
-100%{transform:rotate(360deg);}
+  0%{transform:rotate(0deg);}
+  100%{transform:rotate(360deg);}
 }
 
+/* القسم السفلي (الأزرار ومربع الكتابة) ثابت تماماً ولا يتأثر بالرسائل */
 .bottom{
-display:flex;
-padding:10px;
-gap:6px;
-border-top:1px solid #ddd;
-flex-shrink:0;
-background:white;
-position:sticky;
-bottom:0;
-z-index:20;
-box-shadow:0 -2px 10px rgba(0,0,0,0.05);
-flex-wrap:wrap;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 12px 15px;
+  gap: 10px;
+  border-top: 1px solid #e2e8f0;
+  background: #ffffff;
+  z-index: 20;
+  box-shadow: 0 -4px 15px rgba(0,0,0,0.05);
 }
 
-.bottom .input-group{
-display:flex;
-flex:1;
-gap:6px;
-min-width:0;
-position:relative;
+.bottom-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  flex-wrap: wrap;
 }
 
-input{
-padding:10px 12px;
-border:1px solid #ccc;
-border-radius:5px;
-font-size:16px;
-outline:none;
--webkit-appearance:none;
-appearance:none;
-flex:1;
-min-width:0;
+.action-btns-right, .action-btns-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-input:focus{
-border-color:#2563eb;
+.bottom-input-bar {
+  display: flex;
+  width: 100%;
+  margin-top: 2px;
 }
 
-#msg{
-flex:1;
-min-width:0;
+input#msg{
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #2563eb;
+  border-radius: 10px;
+  font-size: 16px;
+  outline: none;
+  background: #f8fafc;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(37,99,235,0.1);
+}
+
+input#msg:focus{
+  background: #ffffff;
+  border-color: #1d4ed8;
+  box-shadow: 0 0 10px rgba(37,99,235,0.25);
 }
 
 button{
-padding:10px 14px;
-border:none;
-background:#2563eb;
-color:white;
-border-radius:5px;
-cursor:pointer;
-font-size:16px;
-white-space:nowrap;
-touch-action:manipulation;
-transition:all 0.2s;
-flex-shrink:0;
+  padding: 9px 14px;
+  border: none;
+  background: #2563eb;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: bold;
+  white-space: nowrap;
+  touch-action: manipulation;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-button:active{
-transform:scale(0.95);
-}
+button:active{ transform: scale(0.95); }
+button:hover{ background: #1d4ed8; }
 
-button:hover{
-background:#1d4ed8;
-}
+.btn-send { background: #2563eb; }
+.btn-clear { background: #64748b; }
+.btn-clear:hover { background: #475569; }
 
 .btn-file{
-background:#7c3aed;
-font-size:14px;
-padding:10px 12px;
-position:relative;
-overflow:hidden;
+  background: #7c3aed;
+  position: relative;
+  overflow: hidden;
 }
-
-.btn-file:hover{
-background:#6d28d9;
-}
+.btn-file:hover{ background: #6d28d9; }
 
 .btn-file input[type="file"]{
-position:absolute;
-top:0;
-right:0;
-width:100%;
-height:100%;
-opacity:0;
-cursor:pointer;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
 }
 
-.btn-record{
-background:#dc2626;
-font-size:14px;
-padding:10px 12px;
-}
-
-.btn-record:hover{
-background:#b91c1c;
-}
-
+.btn-record{ background: #dc2626; }
+.btn-record:hover{ background: #b91c1c; }
 .btn-record.recording{
-background:#ef4444;
-animation: pulse-red 1s infinite;
+  background: #ef4444;
+  animation: pulse-red 1s infinite;
 }
 
-.btn-emoji{
-background:#f59e0b;
-font-size:16px;
-padding:10px 12px;
-}
-
-.btn-emoji:hover{
-background:#d97706;
-}
+.btn-emoji{ background: #f59e0b; }
+.btn-emoji:hover{ background: #d97706; }
 
 .emoji-picker{
-display:none;
-position:absolute;
-bottom:55px;
-right:0;
-background:white;
-border:1px solid #ccc;
-border-radius:8px;
-box-shadow:0 4px 12px rgba(0,0,0,0.15);
-padding:10px;
-max-width:280px;
-flex-wrap:wrap;
-gap:8px;
-z-index:100;
-max-height:150px;
-overflow-y:auto;
+  display: none;
+  position: absolute;
+  bottom: 100%;
+  right: 15px;
+  margin-bottom: 10px;
+  background: white;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  padding: 10px;
+  max-width: 300px;
+  flex-wrap: wrap;
+  gap: 8px;
+  z-index: 100;
+  max-height: 180px;
+  overflow-y: auto;
 }
 
 .emoji-picker span{
-font-size:20px;
-cursor:pointer;
-padding:3px;
-border-radius:4px;
-transition:background 0.2s;
+  font-size: 22px;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  transition: background 0.2s;
 }
 
-.emoji-picker span:hover{
-background:#f1f5f9;
-}
+.emoji-picker span:hover{ background: #f1f5f9; }
 
 @keyframes pulse-red{
-0%, 100%{
-box-shadow:0 0 0 0 rgba(220,38,38,0.4);
-}
-50%{
-box-shadow:0 0 0 10px rgba(220,38,38,0);
-}
+  0%, 100%{ box-shadow: 0 0 0 0 rgba(220,38,38,0.4); }
+  50%{ box-shadow: 0 0 0 8px rgba(220,38,38,0); }
 }
 
 .deleteBtn{
-margin-top:6px;
-background:#dc2626;
-font-size:13px;
-padding:5px 10px;
-display:inline-block;
-}
-
-.deleteBtn:active{
-transform:scale(0.95);
-}
-
-.deleteBtn:hover{
-background:#b91c1c;
+  margin-top: 6px;
+  background: #dc2626;
+  font-size: 12px;
+  padding: 4px 8px;
 }
 
 .deleteAllBtn{
-background:#dc2626;
-font-size:14px;
-padding:6px 12px;
-margin-right:10px;
-}
-
-.deleteAllBtn:hover{
-background:#b91c1c;
+  background: #dc2626;
+  font-size: 13px;
+  padding: 6px 12px;
 }
 
 .login{
-padding:20px;
-text-align:center;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-height:100%;
+  padding: 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
 }
 
-.login h3{
-font-size:22px;
-margin-bottom:15px;
+.login h3{ font-size: 22px; margin-bottom: 15px; }
+.login .input-group, .adminBox{ width: 90%; max-width: 280px; margin-bottom: 10px; }
+
+.login input{
+  width: 100%;
+  height: 44px;
+  padding: 10px 12px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  outline: none;
 }
 
-.login .input-group{
-width:90%;
-max-width:280px;
-margin-bottom:10px;
-}
-
-.login .input-group input{
-width:100%;
-height:44px;
-padding:10px 12px;
-font-size:16px;
-border:2px solid #ccc;
-border-radius:8px;
-background:white;
-outline:none;
-box-sizing:border-box;
-}
-
-.login .input-group input:focus{
-border-color:#2563eb;
-box-shadow:0 0 0 3px rgba(37,99,235,0.2);
-}
-
-.adminBox{
-margin-top:0;
-width:90%;
-max-width:280px;
-margin-bottom:10px;
-}
-
-.adminBox input{
-width:100%;
-height:44px;
-padding:10px 12px;
-font-size:16px;
-border:2px solid #ccc;
-border-radius:8px;
-background:white;
-outline:none;
-box-sizing:border-box;
-}
-
-.adminBox input:focus{
-border-color:#2563eb;
-box-shadow:0 0 0 3px rgba(37,99,235,0.2);
-}
+.login input:focus{ border-color: #2563eb; }
 
 .login button{
-font-size:18px;
-padding:10px 35px;
-margin-top:5px;
-height:44px;
-display:flex;
-align-items:center;
-justify-content:center;
-background:#2563eb;
-color:white;
-border:none;
-border-radius:8px;
-cursor:pointer;
-width:90%;
-max-width:280px;
+  font-size: 18px;
+  padding: 10px;
+  height: 44px;
+  width: 90%;
+  max-width: 280px;
 }
 
-.login button:hover{
-background:#1d4ed8;
-}
+.admin-controls{ display: flex; gap: 8px; align-items: center; }
 
-.admin-controls{
-display:flex;
-gap:8px;
-align-items:center;
-}
+#chatArea{ display: none; flex-direction: column; height: 100%; width: 100%; }
 
-/* تحسين التمرير */
-#messages::-webkit-scrollbar,
-.online::-webkit-scrollbar,
-.emoji-picker::-webkit-scrollbar{
-width:4px;
-}
-
-#messages::-webkit-scrollbar-track,
-.online::-webkit-scrollbar-track,
-.emoji-picker::-webkit-scrollbar-track{
-background:#f1f1f1;
-border-radius:10px;
-}
-
-#messages::-webkit-scrollbar-thumb,
-.online::-webkit-scrollbar-thumb,
-.emoji-picker::-webkit-scrollbar-thumb{
-background:#888;
-border-radius:10px;
-}
-
-#messages::-webkit-scrollbar-thumb:hover,
-.online::-webkit-scrollbar-thumb:hover,
-.emoji-picker::-webkit-scrollbar-thumb:hover{
-background:#555;
-}
-
-/* تحسينات للشاشات الصغيرة */
-@media (max-width:600px){
-.container{
-height:100vh;
-max-height:100vh;
-border-radius:0;
-padding:0;
-}
-
-body{
-padding:0;
-}
-
-.header{
-font-size:18px;
-padding:10px;
-}
-
-.header-title{
-font-size:18px;
-}
-
-.online{
-font-size:12px;
-padding:4px 8px;
-max-height:150px;
-}
-
-.online-user{
-font-size:12px;
-padding:2px 8px;
-}
-
-.online-user .status-dot{
-width:8px;
-height:8px;
-}
-
-#messages{
-padding:8px 8px 70px 8px;
-}
-
-.msg{
-font-size:15px;
-padding:8px 10px;
-margin-bottom:8px;
-}
-
-.name{
-font-size:16px;
-}
-
-.time{
-font-size:11px;
-}
-
-.bottom{
-padding:8px;
-gap:4px;
-}
-
-.bottom .input-group{
-flex-wrap:wrap;
-}
-
-input{
-font-size:14px;
-padding:8px 10px;
-}
-
-button{
-font-size:14px;
-padding:8px 12px;
-}
-
-.btn-file, .btn-record, .btn-emoji{
-font-size:12px;
-padding:8px 10px;
-}
-
-.deleteBtn{
-font-size:12px;
-padding:4px 8px;
-}
-
-.deleteAllBtn{
-font-size:12px;
-padding:4px 8px;
-}
-
-.login h3{
-font-size:18px;
-}
-
-.login .input-group input,
-.adminBox input{
-height:38px;
-font-size:14px;
-padding:8px 10px;
-}
-
-.login button{
-font-size:16px;
-padding:8px 25px;
-height:38px;
-}
-
-.login .input-group,
-.adminBox{
-width:90%;
-max-width:280px;
-}
-
-.msg-image{
-max-height:200px;
-}
-
-.msg-audio{
-max-width:100%;
-}
-}
-
-@media (max-width:400px){
-.msg{
-font-size:14px;
-padding:6px 8px;
-}
-
-.name{
-font-size:14px;
-}
-
-.bottom .input-group{
-flex-wrap:wrap;
-}
-
-#msg{
-min-width:60px;
-}
-
-button{
-font-size:13px;
-padding:6px 10px;
-}
-}
-
-@media (min-width:768px){
-.container{
-height:90vh;
-max-height:850px;
-}
-
-.msg{
-font-size:18px;
-}
-
-.name{
-font-size:20px;
-}
-}
-
-#chatArea{
-display:none;
-flex-direction:column;
-height:100%;
-width:100%;
-}
-
-.no-users{
-color:#94a3b8;
-font-size:13px;
-padding:5px;
-}
-
-/* أزرار الملفات والصوت */
-.btn-group{
-display:flex;
-gap:4px;
-flex-shrink:0;
+@media (max-width: 768px){
+  body{ padding: 0; }
+  .container{ height: 100vh; height: 100dvh; max-height: none; border-radius: 0; }
+  .header{ font-size: 18px; padding: 10px; }
+  .bottom{ padding: 8px 10px; gap: 8px; }
+  button{ font-size: 13px; padding: 7px 10px; }
+  input#msg{ padding: 10px 12px; font-size: 15px; }
 }
 </style>
 </head>
@@ -722,7 +426,6 @@ flex-shrink:0;
 </div>
 
 <div id="login" class="login">
-
 <h3>تسجيل الدخول</h3>
 
 <div class="input-group">
@@ -738,7 +441,6 @@ flex-shrink:0;
 </div>
 
 <button onclick="startChat()">دخول</button>
-
 </div>
 
 <div id="chatArea">
@@ -749,53 +451,41 @@ flex-shrink:0;
 
 <div class="bottom">
 
-<div class="input-group">
-<input id="msg" placeholder="اكتب رسالتك">
-<button onclick="sendMessage()">إرسال</button>
-<button onclick="clearInput()">مسح</button>
+  <div class="bottom-top-bar">
+    <div class="action-btns-right">
+      <button class="btn-send" onclick="sendMessage()">إرسال 🚀</button>
+      <button class="btn-clear" onclick="clearInput()">مسح 🧹</button>
+    </div>
+    
+    <div class="action-btns-left">
+      <button class="btn-emoji" id="emojiBtn">😀</button>
+      <button class="btn-file" id="fileBtn" title="إرفاق صورة أو ملف">
+        📎
+        <input type="file" id="fileInput" accept="image/*,audio/*,video/*,.pdf,.doc,.docx,.txt">
+      </button>
+      <button class="btn-record" id="recordBtn" title="تسجيل صوتي">🎤</button>
+    </div>
+  </div>
 
-<div class="emoji-picker" id="emojiPicker">
-<span>😀</span><span>😃</span><span>😄</span><span>😁</span><span>😆</span>
-<span>😅</span><span>😂</span><span>🤣</span><span>😊</span><span>😇</span>
-<span>🙂</span><span>🙃</span><span>😉</span><span>😌</span><span>😍</span>
-<span>🥰</span><span>😘</span><span>😗</span><span>😙</span><span>😚</span>
-<span>😋</span><span>😛</span><span>😝</span><span>😜</span><span>🤪</span>
-<span>🤨</span><span>🧐</span><span>🤓</span><span>😎</span><span>🤩</span>
-<span>🥳</span><span>😏</span><span>😒</span><span>😞</span><span>😔</span>
-<span>😟</span><span>😕</span><span>🙁</span><span>☹️</span><span>😣</span>
-<span>😖</span><span>😫</span><span>😩</span><span>🥺</span><span>😢</span>
-<span>😭</span><span>😤</span><span>😠</span><span>😡</span><span>🤬</span>
-<span>🤯</span><span>😳</span><span>🥵</span><span>🥶</span><span>😱</span>
-<span>😨</span><span>😰</span><span>😥</span><span>😓</span><span>🤗</span>
-<span>🤔</span><span>🤭</span><span>🤫</span><span>🤥</span><span>😶</span>
-<span>😐</span><span>😑</span><span>😬</span><span>🙄</span><span>😯</span>
-<span>😦</span><span>😧</span><span>😮</span><span>😲</span><span>🥱</span>
-<span>😴</span><span>🤤</span><span>😪</span><span>😵</span><span>🤐</span>
-<span>🥴</span><span>🤢</span><span>🤮</span><span>🤧</span><span>😷</span>
-<span>🤒</span><span>🤕</span><span>🤑</span><span>🤠</span><span>😈</span>
-<span>👿</span><span>👹</span><span>👺</span><span>🤡</span><span>💩</span>
-<span>👻</span><span>💀</span><span>☠️</span><span>👽</span><span>👾</span>
-<span>🤖</span><span>🎃</span><span>👍</span><span>👎</span><span>👏</span>
-<span>🙌</span><span>👐</span><span>🤲</span><span>🤝</span><span>🙏</span>
-<span>✍️</span><span>💅</span><span>🤳</span><span>💪</span><span>🦾</span>
-<span>🖕</span><span>👀</span><span>👁️</span><span>🧠</span><span>🦴</span>
-<span>🦷</span><span>👄</span><span>👅</span><span>👂</span><span>👃</span>
-<span>❤️</span><span>🧡</span><span>💛</span><span>💚</span><span>💙</span>
-<span>💜</span><span>🖤</span><span>🤍</span><span>🤎</span><span>💔</span>
-<span>❣️</span><span>💕</span><span>💞</span><span>💓</span><span>💗</span>
-<span>💖</span><span>💘</span><span>💝</span><span>🔥</span><span>✨</span>
-<span>🌟</span><span>💫</span><span>💥</span><span>💢</span><span>💦</span>
-</div>
-</div>
+  <div class="bottom-input-bar">
+    <input id="msg" placeholder="اكتب رسالتك هنا..." autocomplete="off">
+  </div>
 
-<div class="btn-group">
-<button class="btn-emoji" id="emojiBtn">😀</button>
-<button class="btn-file" id="fileBtn">
-📎
-<input type="file" id="fileInput" accept="image/*,audio/*,video/*,.pdf,.doc,.docx,.txt">
-</button>
-<button class="btn-record" id="recordBtn">🎤</button>
-</div>
+  <div class="emoji-picker" id="emojiPicker">
+    <span>😀</span><span>😃</span><span>😄</span><span>😁</span><span>😆</span>
+    <span>😅</span><span>😂</span><span>🤣</span><span>😊</span><span>😇</span>
+    <span>🙂</span><span>🙃</span><span>😉</span><span>😌</span><span>😍</span>
+    <span>🥰</span><span>😘</span><span>😗</span><span>😙</span><span>😚</span>
+    <span>😋</span><span>😛</span><span>😝</span><span>😜</span><span>🤪</span>
+    <span>🤨</span><span>🧐</span><span>🤓</span><span>😎</span><span>🤩</span>
+    <span>🥳</span><span>😏</span><span>😒</span><span>😞</span><span>😔</span>
+    <span>😟</span><span>😕</span><span>🙁</span><span>☹️</span><span>😣</span>
+    <span>😖</span><span>😫</span><span>😩</span><span>🥺</span><span>😢</span>
+    <span>😭</span><span>😤</span><span>😠</span><span>😡</span><span>🤬</span>
+    <span>🤯</span><span>😳</span><span>🥵</span><span>🥶</span><span>😱</span>
+    <span>👍</span><span>👎</span><span>👏</span><span>🙌</span><span>🙏</span>
+    <span>❤️</span><span>💖</span><span>🔥</span><span>✨</span><span>🌟</span>
+  </div>
 
 </div>
 
@@ -840,7 +530,23 @@ let mediaRecorder = null;
 let audioChunks = [];
 let isRecording = false;
 
-// ألوان مختلفة لكل عضو
+document.addEventListener('contextmenu', event => event.preventDefault());
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'F12') {
+    e.preventDefault();
+  }
+  if (e.ctrlKey && (e.key === 'u' || e.key === 'U')) {
+    e.preventDefault();
+  }
+  if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) {
+    e.preventDefault();
+  }
+  if (e.ctrlKey && (e.key === 's' || e.key === 'S')) {
+    e.preventDefault();
+  }
+});
+
 const userColors = {};
 const colorPalette = [
 "#FF6B6B", "#4ECDC4", "#45B7D1", "#96CEB4", "#FFEAA7",
@@ -858,7 +564,6 @@ function getUserColor(name) {
     return userColors[name];
 }
 
-// تحويل الملف إلى Base64
 function fileToBase64(file) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -868,16 +573,14 @@ function fileToBase64(file) {
     });
 }
 
-// رفع الملفات (تخزين كـ Base64 في قاعدة البيانات)
 async function uploadFile(file) {
     try {
-        const maxSize = 5 * 1024 * 1024; // 5 ميجابايت
+        const maxSize = 5 * 1024 * 1024;
         if (file.size > maxSize) {
             alert("❌ حجم الملف كبير جداً. الحد الأقصى 5 ميجابايت.");
             return;
         }
 
-        // عرض رسالة تحميل
         const box = document.getElementById("messages");
         const loadingDiv = document.createElement("div");
         loadingDiv.className = "msg uploading-msg";
@@ -890,12 +593,10 @@ async function uploadFile(file) {
             </div>
         `;
         box.appendChild(loadingDiv);
-        box.scrollTop = 0;
+        box.scrollTop = box.scrollHeight;
 
-        // تحويل الملف إلى Base64
         const base64Data = await fileToBase64(file);
         
-        // تحديد نوع الملف
         let type = "file";
         let html = "";
         
@@ -913,11 +614,9 @@ async function uploadFile(file) {
             html = `<a href="${base64Data}" download="${file.name}" target="_blank" class="msg-file">📄 ${file.name}</a>`;
         }
         
-        // حذف رسالة التحميل
         const uploadingEl = document.getElementById("uploadingMsg");
         if (uploadingEl) uploadingEl.remove();
         
-        // إرسال الرسالة مع الملف
         await push(ref(db,"messages"), {
             name: username,
             owner: username,
@@ -936,7 +635,6 @@ async function uploadFile(file) {
     }
 }
 
-// بدء التسجيل الصوتي
 async function startRecording() {
     try {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -952,7 +650,6 @@ async function startRecording() {
             const audioFile = new File([audioBlob], `تسجيل_${new Date().toLocaleTimeString('ar-SA')}.webm`, { type: 'audio/webm' });
             await uploadFile(audioFile);
             
-            // إيقاف المسارات
             stream.getTracks().forEach(track => track.stop());
         };
         
@@ -967,7 +664,6 @@ async function startRecording() {
     }
 }
 
-// إيقاف التسجيل
 function stopRecording() {
     if (mediaRecorder && isRecording) {
         mediaRecorder.stop();
@@ -1044,7 +740,6 @@ document.addEventListener("visibilitychange", function() {
     }
 });
 
-// إعدادات رفع الملفات
 document.getElementById("fileInput").addEventListener("change", function(e) {
     const file = e.target.files[0];
     if (file) {
@@ -1053,7 +748,6 @@ document.getElementById("fileInput").addEventListener("change", function(e) {
     }
 });
 
-// إعدادات التسجيل الصوتي
 document.getElementById("recordBtn").addEventListener("click", function() {
     if (isRecording) {
         stopRecording();
@@ -1141,7 +835,7 @@ data: child.val()
 });
 });
 
-messages.sort((a, b) => b.key.localeCompare(a.key));
+messages.sort((a, b) => a.key.localeCompare(b.key));
 
 box.innerHTML = "";
 
@@ -1174,15 +868,14 @@ box.appendChild(div);
 });
 
 if (messages.length > 0) {
-box.scrollTop = 0;
+box.scrollTop = box.scrollHeight;
 }
 
 }
 
-// عرض المتصلين الحاليين فقط
 function renderOnlineUsers(snapshot) {
 const now = Date.now();
-const ONLINE_TIMEOUT = 60000; // 60 ثانية
+const ONLINE_TIMEOUT = 60000;
 const onlineUsers = [];
 
 snapshot.forEach(child => {
@@ -1192,7 +885,6 @@ const lastSeen = data.lastSeen || parseInt(key);
 const age = now - lastSeen;
 const status = data.status || "offline";
 
-// فقط المستخدمين المتصلين حالياً
 const isOnline = (status === "online" && age < ONLINE_TIMEOUT) || age < 30000;
 
 if (isOnline) {
@@ -1206,12 +898,10 @@ lastSeen: lastSeen
 const onlineUsersDiv = document.getElementById("onlineUsers");
 const onlineCount = document.getElementById("onlineCount");
 
-// تحديث العدد
 onlineCount.textContent = `👥 المتصلون الآن: ${onlineUsers.length}`;
 
 let html = '';
 
-// عرض المتصلين الحاليين فقط
 onlineUsers.forEach(user => {
 html += `
 <span class="online-user">
@@ -1225,10 +915,9 @@ html += `
 onlineUsersDiv.innerHTML = html || '<span class="no-users">👤 لا يوجد متصلين حالياً</span>';
 }
 
-// تنظيف المستخدمين غير النشطين (أكثر من دقيقتين)
 function cleanupInactiveUsers() {
 const now = Date.now();
-const INACTIVE_TIMEOUT = 2 * 60 * 1000; // دقيقتين
+const INACTIVE_TIMEOUT = 2 * 60 * 1000;
 
 const onlineRef = ref(db, "online");
 get(onlineRef).then((snapshot) => {
@@ -1238,7 +927,6 @@ const data = child.val();
 const lastSeen = data.lastSeen || parseInt(child.key);
 const age = now - lastSeen;
 
-// حذف إذا كان غير نشط لأكثر من دقيقتين
 if (age > INACTIVE_TIMEOUT) {
 remove(ref(db, "online/" + child.key));
 }
@@ -1249,19 +937,15 @@ console.error("خطأ في تنظيف المستخدمين غير النشطين
 });
 }
 
-// الاستماع للتغييرات في الرسائل
 onValue(ref(db,"messages"), (snapshot)=>{
 renderMessages(snapshot);
 });
 
-// الاستماع للتغييرات في المتصلين
 onValue(ref(db,"online"), (snapshot)=>{
 renderOnlineUsers(snapshot);
 });
 
-// تنظيف المستخدمين غير النشطين كل 30 ثانية
 setInterval(cleanupInactiveUsers, 30000);
-// تشغيل التنظيف فوراً بعد 3 ثواني
 setTimeout(cleanupInactiveUsers, 3000);
 
 document.getElementById("msg").addEventListener("keypress",(e)=>{
@@ -1276,7 +960,7 @@ document.getElementById("username").focus();
 
 document.getElementById("username").addEventListener("keypress", function(e) {
 if (e.key === "Enter") {
-document.getElementById("adminPass").focus();
+document.getElementById("adminPass").focus( );
 }
 });
 
@@ -1286,7 +970,6 @@ startChat();
 }
 });
 
-// إدارة قائمة الإيموجي
 const emojiBtn = document.getElementById("emojiBtn");
 const emojiPicker = document.getElementById("emojiPicker");
 const msgInput = document.getElementById("msg");
