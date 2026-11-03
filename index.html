@@ -222,6 +222,7 @@ body{
   background: #ffffff;
   z-index: 20;
   box-shadow: 0 -4px 15px rgba(0,0,0,0.05);
+  position: relative; /* ضروري لضبط موضع القائمة المنبثقة فوقه */
 }
 
 .bottom-top-bar {
@@ -311,37 +312,59 @@ button:hover{ background: #1d4ed8; }
   animation: pulse-red 1s infinite;
 }
 
-.btn-emoji{ background: #f59e0b; }
-.btn-emoji:hover{ background: #d97706; }
+.btn-expressions{ background: #f59e0b; }
+.btn-expressions:hover{ background: #d97706; }
 
-.emoji-picker{
+/* قائمة التعبيرات الصورية الجاهزة */
+.expressions-picker{
   display: none;
   position: absolute;
   bottom: 100%;
+  left: 15px;
   right: 15px;
   margin-bottom: 10px;
   background: white;
   border: 1px solid #cbd5e1;
   border-radius: 12px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-  padding: 10px;
-  max-width: 300px;
+  padding: 12px;
+  z-index: 100;
+  max-height: 240px;
+  overflow-y: auto;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.expressions-group-title{
+  font-size: 13px;
+  font-weight: bold;
+  color: #475569;
+  border-bottom: 1px dashed #cbd5e1;
+  padding-bottom: 3px;
+  margin-bottom: 5px;
+}
+
+.expressions-list{
+  display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  z-index: 100;
-  max-height: 180px;
-  overflow-y: auto;
 }
 
-.emoji-picker span{
+.expressions-list span{
   font-size: 22px;
   cursor: pointer;
-  padding: 4px;
-  border-radius: 6px;
-  transition: background 0.2s;
+  padding: 6px;
+  border-radius: 8px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s;
 }
 
-.emoji-picker span:hover{ background: #f1f5f9; }
+.expressions-list span:hover{ 
+  background: #fffbeb; 
+  border-color: #f59e0b;
+  transform: scale(1.15);
+}
 
 @keyframes pulse-red{
   0%, 100%{ box-shadow: 0 0 0 0 rgba(220,38,38,0.4); }
@@ -451,6 +474,39 @@ button:hover{ background: #1d4ed8; }
 
 <div class="bottom">
 
+  <!-- قائمة التعبيرات المصنفة المنبثقة -->
+  <div class="expressions-picker" id="expressionsPicker">
+    
+    <div>
+      <div class="expressions-group-title">❤️ تعبيرات الحب والإعجاب</div>
+      <div class="expressions-list">
+        <span>❤️</span><span>💖</span><span>😍</span><span>🥰</span><span>😘</span><span>💕</span><span>💗</span><span>🌹</span><span>💌</span>
+      </div>
+    </div>
+
+    <div>
+      <div class="expressions-group-title">😂 تعبيرات الضحك والمرح</div>
+      <div class="expressions-list">
+        <span>😂</span><span>🤣</span><span>😆</span><span>😅</span><span>😄</span><span>😁</span><span>🤪</span><span>🥳</span>
+      </div>
+    </div>
+
+    <div>
+      <div class="expressions-group-title">👍 تعبيرات التقدير والتفاعل</div>
+      <div class="expressions-list">
+        <span>👍</span><span>👏</span><span>🙌</span><span>🔥</span><span>✨</span><span>🌟</span><span>🙏</span><span>💯</span><span>🤝</span>
+      </div>
+    </div>
+
+    <div>
+      <div class="expressions-group-title">😮 تعبيرات أخرى</div>
+      <div class="expressions-list">
+        <span>😎</span><span>🤔</span><span>🥺</span><span>😢</span><span>😱</span><span>🤯</span><span>😡</span><span>😴</span>
+      </div>
+    </div>
+
+  </div>
+
   <div class="bottom-top-bar">
     <div class="action-btns-right">
       <button class="btn-send" onclick="sendMessage()">إرسال 🚀</button>
@@ -458,7 +514,8 @@ button:hover{ background: #1d4ed8; }
     </div>
     
     <div class="action-btns-left">
-      <button class="btn-emoji" id="emojiBtn">😀</button>
+      <!-- زر التعبيرات الجديد -->
+      <button class="btn-expressions" id="expressionsBtn" type="button">تعبيرات 🎭</button>
       <button class="btn-file" id="fileBtn" title="إرفاق صورة أو ملف">
         📎
         <input type="file" id="fileInput" accept="image/*,audio/*,video/*,.pdf,.doc,.docx,.txt">
@@ -469,22 +526,6 @@ button:hover{ background: #1d4ed8; }
 
   <div class="bottom-input-bar">
     <input id="msg" placeholder="اكتب رسالتك هنا..." autocomplete="off">
-  </div>
-
-  <div class="emoji-picker" id="emojiPicker">
-    <span>😀</span><span>😃</span><span>😄</span><span>😁</span><span>😆</span>
-    <span>😅</span><span>😂</span><span>🤣</span><span>😊</span><span>😇</span>
-    <span>🙂</span><span>🙃</span><span>😉</span><span>😌</span><span>😍</span>
-    <span>🥰</span><span>😘</span><span>😗</span><span>😙</span><span>😚</span>
-    <span>😋</span><span>😛</span><span>😝</span><span>😜</span><span>🤪</span>
-    <span>🤨</span><span>🧐</span><span>🤓</span><span>😎</span><span>🤩</span>
-    <span>🥳</span><span>😏</span><span>😒</span><span>😞</span><span>😔</span>
-    <span>😟</span><span>😕</span><span>🙁</span><span>☹️</span><span>😣</span>
-    <span>😖</span><span>😫</span><span>😩</span><span>🥺</span><span>😢</span>
-    <span>😭</span><span>😤</span><span>😠</span><span>😡</span><span>🤬</span>
-    <span>🤯</span><span>😳</span><span>🥵</span><span>🥶</span><span>😱</span>
-    <span>👍</span><span>👎</span><span>👏</span><span>🙌</span><span>🙏</span>
-    <span>❤️</span><span>💖</span><span>🔥</span><span>✨</span><span>🌟</span>
   </div>
 
 </div>
@@ -786,7 +827,7 @@ time: new Date().toLocaleString('ar-SA')
 });
 
 document.getElementById("msg").value="";
-document.getElementById("emojiPicker").style.display = "none";
+document.getElementById("expressionsPicker").style.display = "none";
 };
 
 window.clearInput = function(){
@@ -970,20 +1011,21 @@ startChat();
 }
 });
 
-const emojiBtn = document.getElementById("emojiBtn");
-const emojiPicker = document.getElementById("emojiPicker");
+// تفعيل زر التعبيرات الجاهزة وظهور القائمة بشكل صحيح
+const expressionsBtn = document.getElementById("expressionsBtn");
+const expressionsPicker = document.getElementById("expressionsPicker");
 const msgInput = document.getElementById("msg");
 
-emojiBtn.addEventListener("click", function(e) {
+expressionsBtn.addEventListener("click", function(e) {
     e.stopPropagation();
-    if (emojiPicker.style.display === "flex") {
-        emojiPicker.style.display = "none";
+    if (expressionsPicker.style.display === "flex") {
+        expressionsPicker.style.display = "none";
     } else {
-        emojiPicker.style.display = "flex";
+        expressionsPicker.style.display = "flex";
     }
 });
 
-emojiPicker.querySelectorAll("span").forEach(emoji => {
+expressionsPicker.querySelectorAll(".expressions-list span").forEach(emoji => {
     emoji.addEventListener("click", function() {
         msgInput.value += this.textContent;
         msgInput.focus();
@@ -991,8 +1033,8 @@ emojiPicker.querySelectorAll("span").forEach(emoji => {
 });
 
 document.addEventListener("click", function(e) {
-    if (!emojiPicker.contains(e.target) && e.target !== emojiBtn) {
-        emojiPicker.style.display = "none";
+    if (!expressionsPicker.contains(e.target) && e.target !== expressionsBtn) {
+        expressionsPicker.style.display = "none";
     }
 });
 
